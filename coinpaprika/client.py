@@ -3,13 +3,14 @@ import requests
 from coinpaprika.exceptions import CoinpaprikaAPIException
 from coinpaprika.exceptions import CoinpaprikaRequestException
 
+
 class Client(object):
     API_URL = "https://api.coinpaprika.com/v1"
 
     def __init__(self, requests_params=None):
         self.session = self._init_session()
         self._requests_params = requests_params
-    
+
     def _init_session(self):
         session = requests.session()
         session.headers.update({'Accept': 'application/json',
@@ -27,7 +28,7 @@ class Client(object):
         # if get request assign data array to params value for requests lib
         if data and (method == 'get' or force_params):
             kwargs['params'] = kwargs['data']
-            del(kwargs['data'])
+            del (kwargs['data'])
 
         response = getattr(self.session, method)(uri, **kwargs)
 

@@ -20,6 +20,7 @@ class CoinpaprikaAPIException(Exception):
     def __str__(self):
         return "CoinpaprikaAPIException(status_code: {}): {}".format(self.status_code, self.message)
 
+
 class CoinpaprikaRequestException(Exception):
 
     def __init__(self, message):

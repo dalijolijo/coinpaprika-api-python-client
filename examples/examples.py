@@ -1,65 +1,68 @@
-from coinpaprika import client as Coinpaprika
+import json
 
-client = Coinpaprika.Client()
+from coinpaprika.client import Client
 
-# List coins
-client.coins()
 
-# Get coin by ID (example: btc-bitcoin)
-client.coin("btc-bitcoin")
+def main():
+    client = Client()
 
-# Get tweets by coin ID (max 50 tweets)
-client.twitter("btc-bitcoin")
+    # List coins
+    client.coins()
 
-# Get coin events by coin ID
-client.events("btc-bitcoin")
+    # Get today OHLC (can change every each request until actual close of the day at 23:59:59)
+    # print(client.today("btx-bitcore"))
 
-# Get exchanges by coin ID
-client.exchanges("btc-bitcoin")
+    # Get ticker information for a specific coin (USD,BTC,ETH)
+    # print(client.ticker("btx-bitcore"))
 
-# Get markets by coin ID (USD,BTC,ETH,PLN)
-client.markets("btc-bitcoin", quotes="USD")
+    # Get markets by exchange ID (USD,BTC,ETH,PLN) with quotes USD
+    # print(client.exchange_markets("binance", quotes="EUR"))
 
-# Get 24h OHLC candle (USD,BTC)
-client.candle("btc-bitcoin")
+    # Price converter
+    #print(client.price_converter(base_currency_id="btx-bitcore", quote_currency_id="usd-us-dollars", amount=1))
+    # print(client.price_converter(base_currency_id="btx-bitcore", quote_currency_id="eur-euro", amount=1))
 
-# Get historical OHLCV information for a specific coin (USD,BTC)
-client.candles("btc-bitcoin", start="2019-01-11T00:00:00Z")
+    # print(client.price_converter(base_currency_id="usd-us-dollars", quote_currency_id="btx-bitcore", amount=8.99))
+    # print(client.price_converter(base_currency_id="usd-us-dollars", quote_currency_id="eur-euro", amount=8.99))
 
-# Get today OHLC (can change every each request until actual close of the day at 23:59:59)
-client.today("btc-bitcoin")
+    # BTX price USD
+    json_dict_usd = client.price_converter(base_currency_id="btx-bitcore", quote_currency_id="usd-us-dollars", amount=1)
+    print("USD price for 1 BTX : $" + str(json_dict_usd["price"]).replace('.', ','))
 
-# Get people by ID (example: vitalik-buterin)
-client.people("vitalik-buterin")
+    # BTX price USD
+    json_dict_eur = client.price_converter(base_currency_id="btx-bitcore", quote_currency_id="eur-euro", amount=1)
+    print("EUR price for 1 BTX : " + str(json_dict_eur["price"]).replace('.', ',') + " EUR")
+    print()
+    print(str(json_dict_usd["price"]).replace('.', ','))
+    print(str(json_dict_eur["price"]).replace('.', ','))
+    print()
 
-# List tags
-client.tags()
+    # Package price for easyONE Started
+    easy_one_dollar_price = "8.5"
+    json_dict_easy_one_eur = client.price_converter(base_currency_id="usd-us-dollars", quote_currency_id="eur-euro", amount=easy_one_dollar_price)
+    json_dict_easy_one_btx = client.price_converter(base_currency_id="usd-us-dollars", quote_currency_id="btx-bitcore", amount=easy_one_dollar_price)
+    print("USD price for easyONE Started : $" + easy_one_dollar_price)
+    print("EUR price for easyONE Started : " + str(json_dict_easy_one_eur["price"]).replace('.', ',') + " EUR")
+    print("BTX price for easyONE Started : " + str(json_dict_easy_one_btx["price"]).replace('.',',') + " BTX")
+    print()
 
-client.tags(additional_fields="coins,icos")
+    # Package price for easyONE Enthusiast
+    easy_one_special_dollar_price = "9.5"
+    json_dict_easy_two_btx = client.price_converter(base_currency_id="usd-us-dollars", quote_currency_id="btx-bitcore", amount=easy_one_special_dollar_price)
+    json_dict_easy_two_eur = client.price_converter(base_currency_id="usd-us-dollars", quote_currency_id="eur-euro", amount=easy_one_special_dollar_price)
+    print("USD price for easyONE Enthusiast : $" + easy_one_special_dollar_price)
+    print("EUR price for easyONE Enthusiast : " + str(json_dict_easy_two_eur["price"]).replace('.',',') + " EUR")
+    print("BTX price for easyONE Enthusiast : " + str(json_dict_easy_two_btx["price"]).replace('.',',') + " BTX")
+    print()
 
-# Get tag by ID
-client.tag("blockchain-service")
 
-# Get tickers for all coins (USD,BTC,ETH)
-client.tickers()
+if __name__ == "__main__":
+    while (True):
 
-# Get ticker information for a specific coin (USD,BTC,ETH)
-client.ticker("btc-bitcoin")
-
-# Get historical ticker information for a specific coin (USD,BTC,ETH)
-client.historical("btc-bitcoin", start="2019-04-11T00:00:00Z")
-
-# List exchanges
-client.exchange_list()
-
-# Get exchange by ID
-client.exchange("binance", quotes="USD")
-
-# Get markets by exchange ID (USD,BTC,ETH,PLN) with quotes USD
-client.exchange_markets("binance", quotes="USD")
-
-# Search
-client.search(q="btc",c="currencies,exchanges,icos,people,tags", modifier="symbol_search", limit=42)
-
-# Price converter
-client.price_converter(base_currency_id="btc-bitcoin", quote_currency_id="usd-us-dollars", amount=1337)
+        print("---------------------------------------------------------")
+        x = input("Press 'Enter' to get the last rates for BTX...\nType 'exit' to exit the program.")
+        print("---------------------------------------------------------")
+        if x == 'exit':
+            quit(0)
+        else:
+            main()
